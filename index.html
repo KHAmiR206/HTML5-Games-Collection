@@ -4,179 +4,437 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>HTML5 Games Collection</title>
+    <link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazir-font@v30.1.0/dist/font-face.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        /* Reset CSS */
+        :root {
+            --bg-color: #1a1a1a;
+            --text-color: #ffffff;
+            --accent-color: #00ff88;
+            --card-bg: #2d2d2d;
+            --border-color: #3d3d3d;
+        }
+
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            transition: all 0.3s ease;
         }
 
         body {
-            background: #1a1a1a; /* Dark background */
-            color: #ffffff; /* White text */
-            line-height: 1.6; /* Improved readability */
+            background: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.6;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body.rtl {
+            font-family: Vazir, sans-serif;
         }
 
         .container {
-            max-width: 1200px; /* Center content with max width */
+            max-width: 1200px;
             margin: 0 auto;
             padding: 2rem;
+        }
+
+        .lang-toggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+            animation: popIn 0.5s ease;
+        }
+
+        .lang-toggle:hover {
+            transform: scale(1.1);
+            border-color: var(--accent-color);
         }
 
         header {
             text-align: center;
             margin-bottom: 3rem;
             padding: 2rem;
-            background: rgba(0, 0, 0, 0.3); /* Semi-transparent black background */
-            border-radius: 15px; /* Rounded corners */
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 15px;
+            animation: fadeIn 1s ease;
         }
 
         h1 {
             font-size: 2.5rem;
-            color: #00ff88; /* Neon green color */
+            color: var(--accent-color);
             margin-bottom: 1rem;
-            text-shadow: 0 0 10px rgba(0, 255, 136, 0.3); /* Glow effect */
+            text-shadow: 0 0 10px rgba(0, 255, 136, 0.3);
+            animation: glow 2s infinite alternate;
         }
 
         .intro {
             font-size: 1.1rem;
-            color: #cccccc; /* Light gray text */
-            max-width: 800px; /* Limit width for better readability */
+            color: #cccccc;
+            max-width: 800px;
             margin: 0 auto;
+            animation: slideIn 0.8s ease;
+        }
+
+        .developer-info {
+            background: var(--card-bg);
+            border-radius: 15px;
+            padding: 2rem;
+            margin: 2rem 0;
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+            animation: fadeIn 1s ease;
+        }
+
+        .profile-pic {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid var(--accent-color);
+        }
+
+        .developer-text {
+            flex: 1;
+        }
+
+        .social-links {
+            display: flex;
+            gap: 1.5rem;
+            margin-top: 1rem;
+            justify-content: flex-start;
+        }
+
+        .social-links a {
+            color: var(--text-color);
+            font-size: 1.5rem;
+            transition: transform 0.3s ease;
+        }
+
+        .social-links a:hover {
+            transform: translateY(-3px);
+            color: var(--accent-color);
         }
 
         .games-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); /* Responsive grid */
-            gap: 2rem; /* Space between cards */
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
             padding: 1rem;
         }
 
         .game-card {
-            background: #2d2d2d; /* Dark card background */
-            border-radius: 10px; /* Rounded corners */
+            background: var(--card-bg);
+            border-radius: 10px;
             padding: 1.5rem;
-            transition: transform 0.3s ease, box-shadow 0.3s ease; /* Smooth hover effect */
             text-decoration: none;
-            color: white;
-            border: 1px solid #3d3d3d; /* Subtle border */
+            color: var(--text-color);
+            border: 1px solid var(--border-color);
+            min-height: 150px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            opacity: 0.9;
+            transform: translateY(20px);
+            animation: cardEntrance 0.6s ease forwards;
         }
 
         .game-card:hover {
-            transform: translateY(-5px); /* Lift card on hover */
-            box-shadow: 0 5px 15px rgba(0, 255, 136, 0.2); /* Neon shadow */
-            border-color: #00ff88; /* Neon border */
-        }
-
-        .game-card img {
-            width: 100%;
-            height: 200px;
-            object-fit: cover; /* Ensure images fit nicely */
-            border-radius: 8px;
-            margin-bottom: 1rem;
+            transform: translateY(-5px) scale(1.02);
+            box-shadow: 0 5px 15px rgba(0, 255, 136, 0.2);
+            border-color: var(--accent-color);
+            opacity: 1;
         }
 
         .game-title {
             font-size: 1.2rem;
-            color: #00ff88; /* Neon green */
+            color: var(--accent-color);
             margin-bottom: 0.5rem;
+            animation: textGlow 1s ease infinite alternate;
         }
 
         .game-description {
             font-size: 0.9rem;
-            color: #aaaaaa; /* Light gray */
+            color: #aaaaaa;
+            animation: fadeInUp 0.8s ease;
         }
 
-        /* Animation for header text */
+        .persian-mode {
+            --bg-color: #121212;
+            --text-color: #e0e0e0;
+            --accent-color: #ff6f61;
+            --card-bg: #1e1e1e;
+            --border-color: #333333;
+        }
+
+        #scroll-top {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: var(--accent-color);
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+            z-index: 1000;
+            animation: bounce 2s infinite;
+        }
+
+        #scroll-top:hover {
+            transform: scale(1.1);
+        }
+
         @keyframes glow {
             0% { text-shadow: 0 0 10px rgba(0, 255, 136, 0.3); }
             50% { text-shadow: 0 0 20px rgba(0, 255, 136, 0.6); }
             100% { text-shadow: 0 0 10px rgba(0, 255, 136, 0.3); }
         }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes cardEntrance {
+            to { opacity: 0.9; transform: translateY(0); }
+        }
+
+        @keyframes textGlow {
+            0% { text-shadow: 0 0 5px rgba(0, 255, 136, 0.3); }
+            100% { text-shadow: 0 0 15px rgba(0, 255, 136, 0.6); }
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        @keyframes popIn {
+            0% { transform: scale(0); }
+            90% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+
+        @media (max-width: 768px) {
+            h1 { font-size: 2rem; }
+            .game-card { padding: 1rem; }
+            #scroll-top {
+                bottom: 20px;
+                right: 20px;
+            }
+            .developer-info {
+                flex-direction: column;
+                text-align: center;
+            }
+            .social-links {
+            justify-content: center; /* وسط‌چین در موبایل */
+            }
+        }
     </style>
 </head>
 <body>
+    <button class="lang-toggle" onclick="toggleLanguage()">🇺🇸</button>
+    <div id="scroll-top" onclick="scrollToTop()">↑</div>
+    
     <div class="container">
         <header>
-            <h1>🎮 HTML5 Games Collection</h1>
-            <p class="intro">
-                Welcome to my collection of interactive games! Here, you can experience 20 different games built using Construct 2. Each game runs in an isolated environment and requires no plugins or special installations. 
-                
+            <h1 data-en="🎮 HTML5 Games Collection" data-fa="🎮 مجموعه بازی های HTML5"></h1>
+            <p class="intro" 
+               data-en="Welcome to my collection of interactive games! Here, you can experience 20 different games built using Construct 2. Each game runs in an isolated environment and requires no plugins or special installations. Enjoy! 😊"
+               data-fa="به مجموعه بازی های تعاملی من خوش آمدید! اینجا میتونید ۲۰ بازی مختلف که با Construct 2 ساخته شدن رو تجربه کنید. هر بازی در محیط ایزوله اجرا میشه و نیاز به افزونه یا نصب خاصی نداره. لذت ببرید! 😊">
             </p>
-            <p>
-                -
-            </p>
-            <p>
-                Enjoy! 😊
-            </p>
-            
         </header>
+
+        <section class="developer-info">
+            <img src="Other/my-profile.jpg" class="profile-pic" alt="Developer">
+            <div class="developer-text">
+                <p data-en="Hi, I'm Amir! Game developer and computer enthusiast." 
+                   data-fa="سلام، من امیرم! توسعه‌دهنده بازی و علاقه‌مند به کامپیوتر">
+                </p>
+                <p data-en="You can find me here:"
+                   data-fa="می‌تونید منو اینجاها پیدا کنید:">
+                </p>
+                <div class="social-links">
+                    <a href="https://t.me/AHG206" target="_blank">
+                        <i class="fab fa-telegram"></i>
+                    </a>
+                    <a href="https://wa.me/+989394545134" target="_blank">
+                        <i class="fab fa-whatsapp"></i>
+                    </a>
+                    <a href="https://instagram.com/amirh_ghafari" target="_blank">
+                        <i class="fab fa-instagram"></i>
+                    </a>
+                    <a href="https://linkedin.com/in/amirh-ghafari-0b903b344" target="_blank">
+                        <i class="fab fa-linkedin"></i>
+                    </a>
+                </div>
+            </div>
+        </section>
 
         <div class="games-grid">
             <!-- Game 1 -->
             <a href="game1/index.html" class="game-card">
-                <!--<img src="game1/thumbnail.jpg" alt="Game 1">-->
-                <h3 class="game-title">1. GOGOPO 😵‍💫</h3>
-                <p class="game-description">Carefull about those Nails.</p>
+                <h3 class="game-title" data-en="1. GOGOPO 😵‍💫" data-fa="۱. گوگوپو 😵‍💫"></h3>
+                <p class="game-description" data-en="Careful about those Nails" data-fa="مواظب میخ ها باش"></p>
             </a>
+
             <!-- Game 2 -->
             <a href="game2/index.html" class="game-card">
-                <!--<img src="game2/thumbnail.jpg" alt="Game 2">-->
-                <h3 class="game-title">2. NOXU 👾</h3>
-                <p class="game-description">Collect White Circles (NOT THAT EASY).</p>
+                <h3 class="game-title" data-en="2. NOXU 👾" data-fa="۲. نوکسو 👾"></h3>
+                <p class="game-description" data-en="Collect White Circles (NOT THAT EASY)" data-fa="دایره های سفید رو جمع کن (به این راحتیا هم نیست!)"></p>
             </a>
+
             <!-- Game 3 -->
             <a href="game3/index.html" class="game-card">
-                <!--<img src="game3/thumbnail.jpg" alt="Game 3">-->
-                <h3 class="game-title">3. ZOMBAX 🤠</h3>
-                <p class="game-description">DON'T LET THEM REACH YOU.</p>
+                <h3 class="game-title" data-en="3. ZOMBAX 🤠" data-fa="۳. زومبکس 🤠"></h3>
+                <p class="game-description" data-en="DON'T LET THEM REACH YOU" data-fa="نذار بهت برسن"></p>
             </a>
+
             <!-- Game 4 -->
             <a href="game4/index.html" class="game-card">
-                <!--<img src="game4/thumbnail.jpg" alt="Game 4">-->
-                <h3 class="game-title">4. GOBOX 🚀</h3>
-                <p class="game-description">Collect the CIRCLES ASAP!!</p>
+                <h3 class="game-title" data-en="4. GOBOX 🚀" data-fa="۴. گوباکس 🚀"></h3>
+                <p class="game-description" data-en="Collect the CIRCLES ASAP!!" data-fa="دایره ها رو هرچه سریعتر جمع کن!!"></p>
             </a>
+
             <!-- Game 5 -->
             <a href="game5/index.html" class="game-card">
-                <!--<img src="game5/thumbnail.jpg" alt="Game 5">-->
-                <h3 class="game-title">5. LOSENOID 🔫</h3>
-                <p class="game-description">SHOOT EM ALL.</p>
+                <h3 class="game-title" data-en="5. LOSENOID 🔫" data-fa="۵. لوزنوید 🔫"></h3>
+                <p class="game-description" data-en="SHOOT EM ALL" data-fa="همشون رو بزن"></p>
             </a>
+
             <!-- Game 6 -->
             <a href="game6/index.html" class="game-card">
-                <!--<img src="game6/thumbnail.jpg" alt="Game 6">-->
-                <h3 class="game-title">6. AVOIX 🛕</h3>
-                <p class="game-description">Can You PLAY THAT About 60 Seconds??</p>
+                <h3 class="game-title" data-en="6. AVOIX 🛕" data-fa="۶. آووا 🛕"></h3>
+                <p class="game-description" data-en="Can You PLAY THAT About 60 Seconds??" data-fa="میتونی ۶۰ ثانیه بازی کنیش؟؟"></p>
             </a>
+
             <!-- Game 7 -->
             <a href="game7/index.html" class="game-card">
-                <!--<img src="game7/thumbnail.jpg" alt="Game 7">-->
-                <h3 class="game-title">7. DIDZA 🎲</h3>
-                <p class="game-description">DO NOT THOUCH THE BLUE ONES.</p>
+                <h3 class="game-title" data-en="7. DIDZA 🎲" data-fa="۷. دیدزا 🎲"></h3>
+                <p class="game-description" data-en="DO NOT TOUCH THE BLUE ONES" data-fa="به آبی ها دست نزن"></p>
             </a>
+
             <!-- Game 8 -->
             <a href="game8/index.html" class="game-card">
-                <!--<img src="game8/thumbnail.jpg" alt="Game 8">-->
-                <h3 class="game-title">8. SNOWBOT 🎭</h3>
-                <p class="game-description">Now Lets Try with UPSIDE DOWN.</p>
+                <h3 class="game-title" data-en="8. SNOWBOT 🎭" data-fa="۸. اسنوبات 🎭"></h3>
+                <p class="game-description" data-en="Now Try with UPSIDE DOWN" data-fa="حالا برعکس امتحان کن"></p>
             </a>
+
             <!-- Game 9 -->
             <a href="game9/index.html" class="game-card">
-                <!--<img src="game9/thumbnail.jpg" alt="Game 9">-->
-                <h3 class="game-title">9. TSUUUU 🦖</h3>
-                <p class="game-description">With a Little Sound.</p>
+                <h3 class="game-title" data-en="9. TSUUUU 🦖" data-fa="۹. چوووو 🦖"></h3>
+                <p class="game-description" data-en="With a Little Sound" data-fa="با یه ذره صدا"></p>
             </a>
+
             <!-- Game 10 -->
             <a href="game10/index.html" class="game-card">
-                <!--<img src="game10/thumbnail.jpg" alt="Game 10">-->
-                <h3 class="game-title">10. GOUP RISE ⚽️</h3>
-                <p class="game-description">WHO SAW A CRAZY BALL!?</p>
+                <h3 class="game-title" data-en="10. GOUP RISE ⚽️" data-fa="۱۰. گوآپ رایز ⚽️"></h3>
+                <p class="game-description" data-en="WHO SAW A CRAZY BALL!?" data-fa="کی یه توپ دیوونه دیده!؟"></p>
             </a>
-            <!-- Add more games here... -->
+
+            <!-- Game 11 -->
+            <a href="game11/index.html" class="game-card">
+                <h3 class="game-title" data-en="11. RETROX 🎮" data-fa="۱۱. رتراکس 🎯"></h3>
+                <p class="game-description" data-en="USE GRAVITY" data-fa="از جاذبه استفاده کن"></p>
+            </a>
+
+            <!-- Game 12 -->
+            <a href="game12/index.html" class="game-card">
+                <h3 class="game-title" data-en="12. CIRCLETON 🚁" data-fa="۱۲. سیرکلتون 🚁"></h3>
+                <p class="game-description" data-en="Did You Think is a Children Game??!" data-fa="فکر کردی این یه بازی بچگانس؟!"></p>
+            </a>
+
+            <!-- Game 13 -->
+            <a href="game13/index.html" class="game-card">
+                <h3 class="game-title" data-en="13. HOPPLER 🧨" data-fa="۱۳. هاپلر  🧨"></h3>
+                <p class="game-description" data-en="Does Anyone Know What the Rules of Ring Boxing Are?" data-fa="کسی میدونه قوانین رینگ بوکس چیه؟"></p>
+            </a>
+
+            <!-- Game 14 -->
+            <a href="game14/index.html" class="game-card">
+                <h3 class="game-title" data-en="14. SKAXIS 🛸" data-fa="۱۴. اسکاکیس  🛸"></h3>
+                <p class="game-description" data-en="DOOODGE!" data-fa=" جاخالی بدههه!"></p>
+            </a>
+
+            <!-- Game 15 -->
+            <a href="game15/index.html" class="game-card">
+                <h3 class="game-title" data-en="15. ZOMBIOD 🏎️" data-fa="۱۵. زامبیود  🏎️"></h3>
+                <p class="game-description" data-en="Shooting Sound(ALALALALALALALa....)" data-fa="صدای تیرزدن(آلالالالالالا)!"></p>
+            </a>
+
+            <!-- Game 16 -->
+            <a href="game16/index.html" class="game-card">
+                <h3 class="game-title" data-en="16. SPYVOX 🧩" data-fa="۱۶. اسپایوکس  🧩"></h3>
+                <p class="game-description" data-en="NAILSSSSSSSSSSS!" data-fa="میخخخخخخ!"></p>
+            </a>
+
+            <!-- Game 17 -->
+            <a href="game17/index.html" class="game-card">
+                <h3 class="game-title" data-en="17. TRIAX 🪐" data-fa="۱۷. تریاکس  🪐"></h3>
+                <p class="game-description" data-en="Its tight... YES?!" data-fa="تنگه...نه؟!"></p>
+            </a>
+
+            <!-- Game 18 -->
+            <a href="game18/index.html" class="game-card">
+                <h3 class="game-title" data-en="18. BLOCKRUN 🏹" data-fa="۱۸. بلاکران  🏹"></h3>
+                <p class="game-description" data-en="Not A OLD Ninja Game!" data-fa="اون بازی قدیمی نینجا نیست!"></p>
+            </a>
+
+            <!-- Game 19 -->
+            <a href="game19/index.html" class="game-card">
+                <h3 class="game-title" data-en="19. METACHROME 🤖" data-fa="۱۹. متاکروم  🤖"></h3>
+                <p class="game-description" data-en="Go Up!" data-fa="برو بالا!"></p>
+            </a>
+
+            <!-- Game 20 -->
+            <a href="game20/index.html" class="game-card">
+                <h3 class="game-title" data-en="20. FLIPEX 🪂" data-fa="۲۰. فلیپکس  🪂"></h3>
+                <p class="game-description" data-en="Jump And Switch... Its the Easy ONES!" data-fa="بپر و تغییر بده... این دیگه آسونه!"></p>
+            </a>
         </div>
     </div>
+
+    <script>
+        let isPersian = true;
+        
+        document.addEventListener('DOMContentLoaded', () => {
+            window.addEventListener('scroll', () => {
+                const scrollBtn = document.getElementById('scroll-top');
+                scrollBtn.style.display = window.scrollY > 300 ? 'flex' : 'none';
+            });
+            toggleLanguage();
+        });
+
+        function toggleLanguage() {
+            isPersian = !isPersian;
+            document.querySelectorAll('[data-en], [data-fa]').forEach(el => {
+                el.textContent = isPersian ? el.dataset.fa : el.dataset.en;
+            });
+            document.documentElement.dir = isPersian ? 'rtl' : 'ltr';
+            document.body.classList.toggle('persian-mode', isPersian);
+            document.querySelector('.lang-toggle').textContent = isPersian ? '🇮🇷' : '🇺🇸';
+        }
+
+        function scrollToTop() {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+    </script>
 </body>
 </html>
